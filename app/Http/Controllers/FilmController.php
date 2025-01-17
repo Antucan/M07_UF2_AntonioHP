@@ -124,4 +124,25 @@ class FilmController extends Controller
         }
         return view("films.list", ["films" => $films_filtered, "title" => $title]);
     }
+
+    public function sortFilms($year = null)
+    {
+        $films_filtered = [];
+
+        $title = "Listado de todas las pelis";
+        $films = FilmController::readFilms();
+        sort($films);
+        //if year and genre are null
+        if (is_null($year))
+            return view('films.list', ["films" => $films, "title" => $title]);
+
+        //list sorted by descending informed
+        foreach ($films as $film) {
+            if ((!is_null($year)) && $film['year'] == $year) {
+                $title = "Listado de todas las pelis filtrado x año";
+                $films_filtered[] = $film;
+            }
+        }
+        return view("films.list", ["films" => $films_filtered, "title" => $title]);
+    }
 }
