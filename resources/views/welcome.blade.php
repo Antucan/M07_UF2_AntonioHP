@@ -24,6 +24,29 @@
         <li><a href=/filmout/sortFilms>Pelis por año descendiente</a></li>
         <li><a href=/filmout/countFilms>Contador de pelis</a></li>
     </ul>
+    {{-- Add film --}}
+    <h2 class="mt-4">Añadir Pelicula</h2>
+    <form action="{{ route('addFilm') }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label for="title">Titulo</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="year">Año</label>
+            <input type="number" class="form-control" id="year" name="year" required>
+        </div>
+        <div class="form-group">
+            <label for="genre">Genero</label>
+            <input type="text" class="form-control" id="genre" name="genre" required>
+        </div>
+        <div class="form-group">
+            <label for="country">Pais</label>
+            <input type="text" class="form-control" id="country" name="country" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Añadir</button>
+    </form>
+
     <!-- Add Bootstrap JS and Popper.js (required for Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
