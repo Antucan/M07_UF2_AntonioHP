@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
@@ -143,5 +144,40 @@ class FilmController extends Controller
         $films = FilmController::readFilms();
         $count = count($films);
         return view("films.counter", ["count" => $count, "title" => $title]);
+    }
+
+    public function addFilm(Request $request)
+    {
+        $films = FilmController::readFilms();
+
+        $new_film = [
+            "name" => $request->input('name'),
+            "year" => $request->input('year'),
+            "genre" => $request->input('genre'),
+            "country" => $request->input('country'),
+            "duration" => $request->input('duration'),
+            "img_url" => $request->input('img_url')
+        ];
+
+        if (!FilmController::isFilm($new_film['name'])) {
+            $films[] = $new_film;
+            $status = Storage::put('/public/films.json', json_encode($films));
+            if ($status)
+                return redirect()->action('App\Http\Controllers\FilmController@listFilms');
+            else
+                return view('welcome', ["status" => "Error al guardar la película"]);
+        } else {
+            return view('welcome', ["status" => "La película ya existe"]);
+        }
+    }
+
+    public static function isFilm($name): bool
+    {
+        $films = FilmController::readFilms();
+        foreach ($films as $film) {
+            if ($film['name'] == $name)
+                return true;
+        }
+        return false;
     }
 }

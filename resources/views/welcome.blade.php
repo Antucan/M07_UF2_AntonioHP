@@ -25,12 +25,16 @@
         <li><a href=/filmout/countFilms>Contador de pelis</a></li>
     </ul>
     {{-- Add film --}}
+    @if (!empty($status))
+        <p style="color:red;">{{ $status }}</p>
+    @endif
+
     <h2 class="mt-4">Añadir Pelicula</h2>
     <form action="{{ route('addFilm') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label for="title">Titulo</label>
-            <input type="text" class="form-control" id="title" name="title" required>
+            <label for="name">Titulo</label>
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="form-group">
             <label for="year">Año</label>
@@ -44,6 +48,15 @@
             <label for="country">Pais</label>
             <input type="text" class="form-control" id="country" name="country" required>
         </div>
+        <div class="form-group">
+            <label for="duration">Duracion</label>
+            <input type="number" class="form-control" id="duration" name="duration" required>
+        </div>
+        <div class="form-group">
+            <label for=img_url>Imagen URL</label>
+            <input type="text" class="form-control" id="img_url" name="img_url" required>
+        </div>
+
         <button type="submit" class="btn btn-primary">Añadir</button>
     </form>
 
@@ -51,8 +64,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-    <!-- Include any additional HTML or Blade directives here -->
 
 </body>
 
