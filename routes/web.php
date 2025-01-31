@@ -36,6 +36,7 @@ Route::middleware('year')->group(function () {
 Route::middleware('url')->group(function () {
     Route::group(['prefix' => 'filmin'], function () {
         Route::post('createFilm', [FilmController::class, "createFilm"])->name('createFilm');
+        Route::delete('deleteFilm', [FilmController::class, "deleteFilm"])->name('deleteFilm');
     });
 });
 
