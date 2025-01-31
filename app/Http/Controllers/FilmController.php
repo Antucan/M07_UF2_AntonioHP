@@ -146,7 +146,7 @@ class FilmController extends Controller
         return view("films.counter", ["count" => $count, "title" => $title]);
     }
 
-    public function addFilm(Request $request)
+    public function createFilm(Request $request)
     {
         $films = FilmController::readFilms();
 
