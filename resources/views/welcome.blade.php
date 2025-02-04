@@ -34,6 +34,7 @@
         @if (!empty($status))
             <p style="color:red;">{{ $status }}</p>
         @endif
+        <hr>
         <h2 class="mt-4">Añadir Pelicula</h2>
         <form action="{{ route('createFilm') }}" method="POST">
             @csrf
@@ -71,7 +72,7 @@
             <input type="text" class="form-control" id="film_name" name="film_name" required>
             <button type="submit" class="btn btn-primary">Borrar</button>
         </form>
-        <hr>
+        
         <!-- Add Bootstrap JS and Popper.js (required for Bootstrap) -->
         {{-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
