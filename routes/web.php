@@ -40,4 +40,9 @@ Route::middleware('url')->group(function () {
     });
 });
 
+Route::middleware('name')->group(function () {
+    Route::group(['prefix' => 'filmup'], function () {
+        Route::put('updateFilm', [FilmController::class, "updateFilm"])->name('updateFilm');
+    });
+});
 

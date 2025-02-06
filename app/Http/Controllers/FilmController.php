@@ -173,18 +173,19 @@ class FilmController extends Controller
 
     public function deleteFilm(Request $request)
     {
+        //con el metodo DELETE
         $films = FilmController::readFilms();
-        $film_name = $request->input('film_name');
+        $film_name = $request->input('name');
         $new_films = [];
         foreach ($films as $film) {
-            if ($film['film_name'] != $film_name)
+            if ($film['name'] != $film_name)
                 $new_films[] = $film;
         }
         $status = Storage::put('/public/films.json', json_encode($new_films));
         if ($status)
             return redirect()->action('App\Http\Controllers\FilmController@listFilms');
         else
-            return view('welcome', ["status" => "Error al eliminar la película"]);
+            return view('welcome', ["status" => "Error al borrar la película"]);
     }
 
     public static function isFilm($name): bool

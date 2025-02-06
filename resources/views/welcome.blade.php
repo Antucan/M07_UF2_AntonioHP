@@ -28,7 +28,6 @@
             <li><a href=/filmout/filmsByGenre>Pelis por genero</a></li>
             <li><a href=/filmout/sortFilms>Pelis por año descendiente</a></li>
             <li><a href=/filmout/countFilms>Contador de pelis</a></li>
-            <li><a href=/filmout/deleteFilm>Borrar pelicula</a></li>
         </ul>
         {{-- Add film --}}
         @if (!empty($status))
@@ -68,6 +67,8 @@
         <hr>
         <h2>Borrar Pelicula</h2>
         <form action="{{ route('deleteFilm') }}" method="POST">
+            @csrf
+            @method('DELETE')
             <label for="film_name">Pelicula a borrar</label>
             <input type="text" class="form-control" id="film_name" name="film_name" required>
             <button type="submit" class="btn btn-primary">Borrar</button>
