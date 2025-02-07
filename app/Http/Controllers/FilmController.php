@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,7 @@ class FilmController extends Controller
         $films = Storage::json('/public/films.json');
         return $films;
     }
+
     /**
      * List films older than input year 
      * if year is not infomed 2000 year will be used as criteria
@@ -169,23 +171,6 @@ class FilmController extends Controller
         } else {
             return view('welcome', ["status" => "La película ya existe"]);
         }
-    }
-
-    public function deleteFilm(Request $request)
-    {
-        //con el metodo DELETE
-        $films = FilmController::readFilms();
-        $film_name = $request->input('name');
-        $new_films = [];
-        foreach ($films as $film) {
-            if ($film['name'] != $film_name)
-                $new_films[] = $film;
-        }
-        $status = Storage::put('/public/films.json', json_encode($new_films));
-        if ($status)
-            return redirect()->action('App\Http\Controllers\FilmController@listFilms');
-        else
-            return view('welcome', ["status" => "Error al borrar la película"]);
     }
 
     public static function isFilm($name): bool
