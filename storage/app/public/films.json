@@ -39,7 +39,14 @@
         "duration": 120,
         "img_url": "https:\/\/pics.filmaffinity.com\/As_bestas-275688233-large.jpg"
     },
-    
+    {
+        "name": "La armadura de dios",
+        "year": "1986",
+        "genre": "Acci\u00f3n",
+        "country": "China",
+        "duration": "94",
+        "img_url": "https:\/\/pics.filmaffinity.com\/long_xiong_hu_di_armour_of_god-348425970-mmed.jpg"
+    },
     {
         "name": "Indiana Jones and the temple of doom",
         "year": "1984",
@@ -47,5 +54,13 @@
         "country": "EEUU",
         "duration": "118",
         "img_url": "https:\/\/pics.filmaffinity.com\/indiana_jones_and_the_temple_of_doom-936064686-mmed.jpg"
+    },
+    {
+        "name": "New Police Story",
+        "year": "2004",
+        "genre": "Acci\u00f3n",
+        "country": "Hong Kong",
+        "duration": "123",
+        "img_url": "https:\/\/pics.filmaffinity.com\/xin_jing_cha_gu_shi_san_ging_chaat_goo_si_new_police_story-688881457-mmed.jpg"
     }
 ]
