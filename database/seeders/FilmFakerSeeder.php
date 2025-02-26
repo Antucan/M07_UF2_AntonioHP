@@ -16,13 +16,14 @@ class FilmFakerSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-
+        // Géneros de películas
+        $genres = ['thriller', 'action', 'drama', 'love'];
         foreach (range(1, 10) as $index) {
             DB::table('films')->insert([
                 'name' => $faker->sentence(3),
                 'year' => $faker->year,
-                'genre' => $faker->word,
-                'country' => $faker->country,
+                'genre' => $faker->randomElement($genres),
+                'country' => $faker->countryCode,
                 'duration' => $faker->numberBetween(60, 180),
                 'img_url' => $faker->imageUrl(640, 480, 'film', true),
                 'created_at' => now(),
