@@ -19,8 +19,8 @@ return new class extends Migration {
             // Clave primaria compuesta
             $table->primary(['film_id', 'actor_id']);
             // Clave foránea de actor_id
-            $table->foreign('film_id')->references('id')->on('films');
-            $table->foreign('actor_id')->references('id')->on('actors');
+            $table->foreign('film_id')->references('id')->on('films')->onDelete('cascade');
+            $table->foreign('actor_id')->references('id')->on('actors')->onDelete('cascade');
         });
     }
 
