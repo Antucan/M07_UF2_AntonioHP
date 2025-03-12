@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FilmController extends Controller
 {
@@ -13,7 +14,13 @@ class FilmController extends Controller
      */
     public static function readFilms(): array
     {
-        $films = Storage::json('/public/films.json');
+        $filmsDb = DB::table('films')->get()->all();
+
+        $filmsJson = Storage::json('/public/films.json');
+        dd($filmsDb, $filmsJson);
+        // una variable que contenga json y bbdd
+        $films = array_merge($filmsDb, $filmsJson);
+        // dd($films);
         return $films;
     }
 

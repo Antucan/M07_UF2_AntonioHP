@@ -27,6 +27,8 @@
                     <td>{{ $actor['birthdate'] }}</td>
                     <td>{{ $actor['country'] }}</td>
                     <td><img src={{ $actor['img_url'] }} style="width: 100px; heigth: 120px;" /></td>
+                    <td>{{ $actor['created_at'] }}</td>
+                    <td>{{ $actor['updated_at'] }}</td>
                 </tr>
             @endforeach
         </table>
