@@ -17,9 +17,13 @@ class FilmController extends Controller
         $filmsDb = DB::table('films')->get()->all();
 
         $filmsJson = Storage::json('/public/films.json');
-        dd($filmsDb, $filmsJson);
+        // dd($filmsDb, $filmsJson);
         // una variable que contenga json y bbdd
-        $films = array_merge($filmsDb, $filmsJson);
+        $filmsDbAsArray = array_map(function ($film) {
+            return (array) $film;
+        }, $filmsDb);
+
+        $films = array_merge($filmsDbAsArray, $filmsJson);
         // dd($films);
         return $films;
     }
@@ -165,11 +169,16 @@ class FilmController extends Controller
             "genre" => $request->input('genre'),
             "country" => $request->input('country'),
             "duration" => $request->input('duration'),
-            "img_url" => $request->input('img_url')
+            "img_url" => $request->input('img_url'),
+            "created_at" => date('Y-m-d H:i:s'),
+            "updated_at" => date('Y-m-d H:i:s')
         ];
 
         if (!FilmController::isFilm($new_film['name'])) {
             $films[] = $new_film;
+            //guardar en json o bbdd, pero no en ambos
+            
+            $status = DB::table('films')->insert($new_film);
             $status = Storage::put('/public/films.json', json_encode($films));
             if ($status)
                 return redirect()->action('App\Http\Controllers\FilmController@listFilms');

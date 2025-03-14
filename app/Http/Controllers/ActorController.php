@@ -34,4 +34,14 @@ class ActorController extends Controller
         $actors = ActorController::readActors();
         return view('actors.list', ["actors" => $actors]);
     }
+
+    /**
+     * Count actors
+     */
+    public function countActors()
+    {
+        $actors = ActorController::readActors();
+        $count = count($actors);
+        return view('actors.count', ["count" => $count]);
+    }
 }

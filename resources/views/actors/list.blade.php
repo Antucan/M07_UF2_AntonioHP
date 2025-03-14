@@ -11,31 +11,26 @@
         <div align="center">
             <table border="1">
                 <tr>
-                    @foreach ($actors as $actor)
-                        @foreach (array_keys($actor) as $key)
-                            <th>{{ $key }}</th>
-                        @endforeach
-                    @break
-                @endforeach
-            </tr>
-
-            @foreach ($actors as $actor)
-                <tr>
-                    <td>{{ $actor['id'] }}</td>
-                    <td>{{ $actor['name'] }}</td>
-                    <td>{{ $actor['surname'] }}</td>
-                    <td>{{ $actor['birthdate'] }}</td>
-                    <td>{{ $actor['country'] }}</td>
-                    <td><img src={{ $actor['img_url'] }} style="width: 100px; heigth: 120px;" /></td>
-                    <td>{{ $actor['created_at'] }}</td>
-                    <td>{{ $actor['updated_at'] }}</td>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Birthdate</th>
+                    <th>Country</th>
+                    <th>Image</th>
                 </tr>
-            @endforeach
-        </table>
-    </div>
-@endif
+                @foreach ($actors as $actor)
+                    <tr>
+                        <td>{{ $actor['name'] }}</td>
+                        <td>{{ $actor['surname'] }}</td>
+                        <td>{{ $actor['birthdate'] }}</td>
+                        <td>{{ $actor['country'] }}</td>
+                        <td><img src={{ $actor['img_url'] }} style="width: 100px; heigth: 120px;" /></td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    @endif
 @endsection
 
 @section('footer')
-@parent
+    @parent
 @endsection

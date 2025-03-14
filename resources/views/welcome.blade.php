@@ -36,6 +36,7 @@
                 <h1 class="mt-4">Lista de Actores</h1>
                 <ul>
                     <li><a href=/actorout/actors>List actors</a></li>
+                    <li><a href=/actorout/countActors>Count actors</a></li>
                 </ul>
             </div>
         </div>
