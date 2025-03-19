@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Queue\Failed\CountableFailedJobProvider;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FilmController extends Controller
 {
-
     /**
      * Read films from storage
      */
@@ -176,10 +176,16 @@ class FilmController extends Controller
 
         if (!FilmController::isFilm($new_film['name'])) {
             $films[] = $new_film;
-            //guardar en json o bbdd, pero no en ambos
-            
-            $status = DB::table('films')->insert($new_film);
-            $status = Storage::put('/public/films.json', json_encode($films));
+            $envFlag = env('FLAG', 'default');
+            // si en el .env pone flag = database
+            if ($envFlag == 'database') {
+                $status = DB::table('films')->insert($new_film);
+            }
+            // si en el .env pone flag = json
+            if ($envFlag == 'json') {
+                $status = Storage::disk('local')->put('public/films.json', json_encode($films));
+            }
+            //una vez guardado redirigir a la lista de peliculas
             if ($status)
                 return redirect()->action('App\Http\Controllers\FilmController@listFilms');
             else

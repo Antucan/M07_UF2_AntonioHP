@@ -32,7 +32,8 @@ class ActorController extends Controller
     public function listActors()
     {
         $actors = ActorController::readActors();
-        return view('actors.list', ["actors" => $actors]);
+        $title = "Actors";
+        return view('actors.list', ["actors" => $actors, "title" => $title]);
     }
 
     /**
@@ -43,5 +44,20 @@ class ActorController extends Controller
         $actors = ActorController::readActors();
         $count = count($actors);
         return view('actors.count', ["count" => $count]);
+    }
+
+    /**
+     * List actors by decade
+     */
+    public function listActorsByDecade($decade = null){
+        $actors = ActorController::readActors();
+        $title = $decade ? "Actors born in the $decade's" : "Actors";
+        $actors_by_decade = [];
+        if ($decade) {
+            $actors_by_decade = array_filter($actors, function ($actor) use ($decade) {
+                return $actor['born'] >= $decade && $actor['born'] < $decade + 10;
+            });
+        }
+        return view('actors.list', ["actors" => $actors_by_decade, "title" => $title]);
     }
 }
