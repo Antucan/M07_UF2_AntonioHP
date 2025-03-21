@@ -13,15 +13,13 @@ class ActorController extends Controller
      */
     public static function readActors(): array
     {
-        $actors_json = Storage::json('/public/actors.json') ?? [];
         try {
             $actors_db = DB::table('actors')->get()->map(function ($actor) {
                 return (array) $actor;
             })->all();
-            // Merge from json and database
-            $actors = array_merge($actors_json, $actors_db);
+            $actors = $actors_db;
         } catch (\Exception $e) {
-            $actors = $actors_json;
+            $actors = [];
         }
         return $actors;
     }
@@ -49,15 +47,32 @@ class ActorController extends Controller
     /**
      * List actors by decade
      */
-    public function listActorsByDecade($decade = null){
+    public function listActorsByDecade(Request $request)
+    {
+        // dd($request);
         $actors = ActorController::readActors();
-        $title = $decade ? "Actors born in the $decade's" : "Actors";
-        $actors_by_decade = [];
-        if ($decade) {
-            $actors_by_decade = array_filter($actors, function ($actor) use ($decade) {
-                return $actor['born'] >= $decade && $actor['born'] < $decade + 10;
-            });
+        $decade = $request->query('decade');
+        $actorsByDecade = [];
+        $title = "Actors from the $decade's";
+        //el campo de la base de datos es birthdate
+        foreach ($actors as $actor) {
+            $actorDecade = substr($actor['birthdate'], 0, 3) . "0";
+            if ($actorDecade == $decade)
+                $actorsByDecade[] = $actor;
         }
-        return view('actors.list', ["actors" => $actors_by_decade, "title" => $title]);
+        return view('actors.list', ["actors" => $actorsByDecade, "title" => $title]);
+    }
+
+    /**
+     * Destroy actor by id
+     */
+    public function destroyActor($id){
+        $actors = ActorController::readActors();
+        $actors = array_filter($actors, function ($actor) use ($id) {
+            return $actor['id'] != $id;
+        });
+        $actors = array_values($actors);
+        Storage::disk('local')->put('public/actors.json', json_encode($actors));
+        return redirect()->route('actors');
     }
 }

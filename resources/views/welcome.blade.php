@@ -38,8 +38,7 @@
                     <li><a href=/actorout/actors>List actors</a></li>
                     <li><a href=/actorout/countActors>Count actors</a></li>
                     {{-- select de decadas --}}
-                    <form action="{{ route('listActorsByDecade') }}" method="POST">
-                        @csrf
+                    <form id="decadeForm" action="/actorout/listActorsByDecade" method="GET">
                         <div class="form-group">
                             <select name="decade" id="decade">
                                 <option value="0">Selecciona una decada</option>
@@ -49,7 +48,7 @@
                                 <option value="2010">2010 to 2019</option>
                                 <option value="2020">2020 to 2029</option>
                             </select>
-                            <button type="submit" class="btn btn-primary">Buscar</button>
+                            <input type="submit" class="btn btn-primary" value="Buscar">
                         </div>
                     </form>
                 </ul>
