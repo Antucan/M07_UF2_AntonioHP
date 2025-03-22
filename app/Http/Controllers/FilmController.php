@@ -2,18 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Queue\Failed\CountableFailedJobProvider;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FilmController extends Controller
 {
-
     /**
      * Read films from storage
      */
     public static function readFilms(): array
     {
-        $films = Storage::json('/public/films.json');
+        $filmsDb = DB::table('films')->get()->all();
+
+        $filmsJson = Storage::json('/public/films.json');
+        // dd($filmsDb, $filmsJson);
+        // una variable que contenga json y bbdd
+        $filmsDbAsArray = array_map(function ($film) {
+            return (array) $film;
+        }, $filmsDb);
+
+        $films = array_merge($filmsDbAsArray, $filmsJson);
+        // dd($films);
         return $films;
     }
 
@@ -31,7 +42,7 @@ class FilmController extends Controller
         $films = FilmController::readFilms();
 
         foreach ($films as $film) {
-            //foreach ($this->datasource as $film) {
+            // foreach ($this->datasource as $film) {
             if ($film['year'] < $year)
                 $old_films[] = $film;
         }
@@ -130,13 +141,12 @@ class FilmController extends Controller
 
     public function sortFilms()
     {
-        $title = "Listado de todas las pelis";
-        $films = FilmController::readFilms();
-        usort($films, function ($a, $b) {
-            return $b['year'] <=> $a['year'];
-        });
-        //if year and genre are null
-
+        //using query builder instead readFilms and only showing db films
+        $title = "Peliculas de la BBDD por año descendente";
+        $films = DB::table('films')->orderBy('year', 'desc')->get()->map(function ($film) {
+            return (array) $film;
+        })->all();
+        //show en list.blade.php
         return view("films.list", ["films" => $films, "title" => $title]);
     }
 
@@ -158,12 +168,23 @@ class FilmController extends Controller
             "genre" => $request->input('genre'),
             "country" => $request->input('country'),
             "duration" => $request->input('duration'),
-            "img_url" => $request->input('img_url')
+            "img_url" => $request->input('img_url'),
+            "created_at" => date('Y-m-d H:i:s'),
+            "updated_at" => date('Y-m-d H:i:s')
         ];
 
         if (!FilmController::isFilm($new_film['name'])) {
             $films[] = $new_film;
-            $status = Storage::put('/public/films.json', json_encode($films));
+            $envFlag = env('FLAG', 'default');
+            // si en el .env pone flag = database
+            if ($envFlag == 'database') {
+                $status = DB::table('films')->insert($new_film);
+            }
+            // si en el .env pone flag = json
+            if ($envFlag == 'json') {
+                $status = Storage::disk('local')->put('public/films.json', json_encode($films));
+            }
+            //una vez guardado redirigir a la lista de peliculas
             if ($status)
                 return redirect()->action('App\Http\Controllers\FilmController@listFilms');
             else

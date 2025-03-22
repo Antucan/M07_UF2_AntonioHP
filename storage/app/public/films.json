@@ -62,5 +62,15 @@
         "country": "Hong Kong",
         "duration": "123",
         "img_url": "https:\/\/pics.filmaffinity.com\/xin_jing_cha_gu_shi_san_ging_chaat_goo_si_new_police_story-688881457-mmed.jpg"
+    },
+    {
+        "name": "Pelicula2",
+        "year": "2025",
+        "genre": "Aventura",
+        "country": "Espa\u00f1a",
+        "duration": "120",
+        "img_url": "https:\/\/www.shutterstock.com\/image-vector\/empty-banner-transparency-without-text-260nw-1754585492.jpg",
+        "created_at": "2025-03-19 18:52:27",
+        "updated_at": "2025-03-19 18:52:27"
     }
 ]

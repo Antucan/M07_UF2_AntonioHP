@@ -24,6 +24,7 @@ class ActorFakerSeeder extends Seeder
                 'birthdate' => $faker->date,
                 'country' => $faker->countryCode,
                 'img_url' => $faker->imageUrl(640, 480, 'actor', true),
+                'agency' => $faker->company,//adding agency
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
