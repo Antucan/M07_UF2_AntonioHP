@@ -47,4 +47,5 @@ Route::group(['prefix' => 'actorout'], function () {
         Route::get('listActorsByDecade/{decade?}', [ActorController::class, "listActorsByDecade"])->name('listActorsByDecade');
     });
     Route::delete('actors/{id}', [ActorController::class, "destroyActor"])->name('destroyActor');
+    Route::get('index', [ActorController::class, "index"])->name('index');
 });

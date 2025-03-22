@@ -88,4 +88,14 @@ class ActorController extends Controller
             ], false);
         }
     }
+    /**
+     * Show actors
+     */
+    public function index()
+    {
+        $actors = ActorController::readActors();
+        $title = "Actors";
+        //show actors data json
+        return response()->json($actors);
+    }
 }
