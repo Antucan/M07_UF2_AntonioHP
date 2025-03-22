@@ -141,13 +141,12 @@ class FilmController extends Controller
 
     public function sortFilms()
     {
-        $title = "Listado de todas las pelis";
-        $films = FilmController::readFilms();
-        usort($films, function ($a, $b) {
-            return $b['year'] <=> $a['year'];
-        });
-        //if year and genre are null
-
+        //using query builder instead readFilms and only showing db films
+        $title = "Peliculas de la BBDD por año descendente";
+        $films = DB::table('films')->orderBy('year', 'desc')->get()->map(function ($film) {
+            return (array) $film;
+        })->all();
+        //show en list.blade.php
         return view("films.list", ["films" => $films, "title" => $title]);
     }
 
