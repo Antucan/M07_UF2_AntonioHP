@@ -66,13 +66,26 @@ class ActorController extends Controller
     /**
      * Destroy actor by id
      */
-    public function destroyActor($id){
-        $actors = ActorController::readActors();
-        $actors = array_filter($actors, function ($actor) use ($id) {
-            return $actor['id'] != $id;
-        });
-        $actors = array_values($actors);
-        Storage::disk('local')->put('public/actors.json', json_encode($actors));
-        return redirect()->route('actors');
+    public function destroyActor($id)
+    {
+        try {
+            // $id = (int)$id;
+            // dd($id);
+            $actor = DB::table('actors')->where('id', $id)->first();
+            
+            if (!$actor) {
+                return response()->json([
+                    'error' => 'Actor not found'
+                ], false);
+            }
+            DB::table('actors')->where('id', $id)->delete();
+            return response()->json([
+                'action' => 'delete'
+            ], true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error deleting actor'
+            ], false);
+        }
     }
 }
