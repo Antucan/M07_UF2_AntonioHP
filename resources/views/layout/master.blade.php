@@ -30,7 +30,7 @@
         <div style="background-color: #ffa900; height: 100px;">
             <a href="{{ url('/') }}">
                 <img style="height: 100px"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Blockbuster_logo.svg/1280px-Blockbuster_logo.svg.png"
+                    src="{{ asset('img/Blockbuster_logo.svg.png') }}"
                     alt="Blockbuster Logo">
             </a>
         </div>
