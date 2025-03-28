@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
-    use HasFactory;
+    use HasFactory;//para que la factory funcione
 
     protected $fillable = [
         'name',
@@ -24,4 +24,8 @@ class Film extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    //public function actors() 1:N
+    //public function actors() N:N
+    //belongsToMany Actor
 }
