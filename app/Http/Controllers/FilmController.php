@@ -6,6 +6,7 @@ use Illuminate\Queue\Failed\CountableFailedJobProvider;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Film;
 
 class FilmController extends Controller
 {
@@ -99,53 +100,38 @@ class FilmController extends Controller
 
     public function listFilmsByYear($year = null)
     {
-        $films_filtered = [];
-
         $title = "Listado de todas las pelis";
-        $films = FilmController::readFilms();
-
+        
         //if year is null
         if (is_null($year))
-            return view('films.list', ["films" => $films, "title" => $title]);
-
-        //list based on year informed
-        foreach ($films as $film) {
-            if ((!is_null($year)) && $film['year'] == $year) {
-                $title = "Listado de todas las pelis filtrado x año";
-                $films_filtered[] = $film;
-            }
-        }
-        return view("films.list", ["films" => $films_filtered, "title" => $title]);
+            $films = Film::all();
+        else
+            $films = Film::where('year', $year)->get();
+            $title = "Listado de todas las pelis filtrado x año";
+        return view("films.list", ["films" => $films, "title" => $title]);
     }
 
     public function listFilmsByGenre($genre = null)
     {
-        $films_filtered = [];
-
         $title = "Listado de todas las pelis";
-        $films = FilmController::readFilms();
 
         //if year is null
-        if (is_null($genre))
-            return view('films.list', ["films" => $films, "title" => $title]);
-
-        //list based on year informed
-        foreach ($films as $film) {
-            if ((!is_null($genre)) && strtolower($film['genre']) == strtolower($genre)) {
-                $title = "Listado de todas las pelis filtrado x categoria";
-                $films_filtered[] = $film;
-            }
+        if (is_null($genre)) {
+            $films = Film::all();
+        } else {
+            $films = Film::where('genre', $genre)->get();
+            $title = "Listado de todas las pelis filtrado x categoria";
         }
-        return view("films.list", ["films" => $films_filtered, "title" => $title]);
+
+        return view("films.list", ["films" => $films, "title" => $title]);
+
     }
 
     public function sortFilms()
     {
         //using query builder instead readFilms and only showing db films
         $title = "Peliculas de la BBDD por año descendente";
-        $films = DB::table('films')->orderBy('year', 'desc')->get()->map(function ($film) {
-            return (array) $film;
-        })->all();
+        $films = Film::orderBy('year', 'desc')->get();
         //show en list.blade.php
         return view("films.list", ["films" => $films, "title" => $title]);
     }
@@ -153,8 +139,7 @@ class FilmController extends Controller
     public function countFilms()
     {
         $title = "Conteo de todas las pelis";
-        $films = FilmController::readFilms();
-        $count = count($films);
+        $count = Film::count();
         return view("films.counter", ["count" => $count, "title" => $title]);
     }
 
@@ -162,27 +147,21 @@ class FilmController extends Controller
     {
         $films = FilmController::readFilms();
 
-        $new_film = [
-            "name" => $request->input('name'),
-            "year" => $request->input('year'),
-            "genre" => $request->input('genre'),
-            "country" => $request->input('country'),
-            "duration" => $request->input('duration'),
-            "img_url" => $request->input('img_url'),
-            "created_at" => date('Y-m-d H:i:s'),
-            "updated_at" => date('Y-m-d H:i:s')
-        ];
+        $new_film = $request->only(['name', 'year', 'genre', 'country', 'duration', 'img_url']);
+        $new_film['created_at'] = now();
+        $new_film['updated_at'] = now();
 
-        if (!FilmController::isFilm($new_film['name'])) {
-            $films[] = $new_film;
+        if (!Film::where('name', $new_film['name'])->exists()) {
             $envFlag = env('FLAG', 'default');
             // si en el .env pone flag = database
             if ($envFlag == 'database') {
-                $status = DB::table('films')->insert($new_film);
+                $film = Film::create($new_film);
+                $status = $film ? true : false;
             }
             // si en el .env pone flag = json
             if ($envFlag == 'json') {
-                $status = Storage::disk('local')->put('public/films.json', json_encode($films));
+                $film = Storage::disk('local')->put('public/films.json', json_encode($films));
+                $status = $film ? true : false;
             }
             //una vez guardado redirigir a la lista de peliculas
             if ($status)
@@ -196,11 +175,6 @@ class FilmController extends Controller
 
     public static function isFilm($name): bool
     {
-        $films = FilmController::readFilms();
-        foreach ($films as $film) {
-            if ($film['name'] == $name)
-                return true;
-        }
-        return false;
+        return Film::where('name', $name)->exists();
     }
 }
