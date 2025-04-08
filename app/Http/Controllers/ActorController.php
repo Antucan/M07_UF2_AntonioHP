@@ -43,11 +43,11 @@ class ActorController extends Controller
      */
     public function listActorsByDecade(Request $request)
     {
-        $decade = $request->query('decade');
-        // dd($decade); //El año se pasa correctamente
-        $title = "Actors from the $decade's";
+        $decade = (int)$request->query('decade');//Fuerzo a int, sin funciona pero da error al convertir en $actorsByDecade
+        $enddecade = $decade + 9; //Se le suma 9 para obtener el rango de la decada 
+        $title = "Actors from " . $decade . "'s";
         //guardar los actores que sean de esa decada
-        $actorsByDecade = ActorController::readActors();
+        $actorsByDecade = Actor::whereBetween('birthdate', ["$decade-01-01", "$enddecade-12-31"])->get();
         // dd($actorsByDecade); //El array se pasa vacio
         return view('actors.list', ["actors" => $actorsByDecade, "title" => $title]);
     }
