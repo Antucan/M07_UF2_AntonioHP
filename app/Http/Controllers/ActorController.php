@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Actor;
 
 class ActorController extends Controller
 {
@@ -13,14 +14,8 @@ class ActorController extends Controller
      */
     public static function readActors(): array
     {
-        try {
-            $actors_db = DB::table('actors')->get()->map(function ($actor) {
-                return (array) $actor;
-            })->all();
-            $actors = $actors_db;
-        } catch (\Exception $e) {
-            $actors = [];
-        }
+        $actors = Actor::all()->toArray();
+
         return $actors;
     }
 
@@ -39,9 +34,8 @@ class ActorController extends Controller
      */
     public function countActors()
     {
-        $actors = ActorController::readActors();
-        $count = count($actors);
-        return view('actors.count', ["count" => $count]);
+        $actors = Actor::count();
+        return view('actors.count', ["count" => $actors]);
     }
 
     /**
@@ -49,17 +43,12 @@ class ActorController extends Controller
      */
     public function listActorsByDecade(Request $request)
     {
-        // dd($request);
-        $actors = ActorController::readActors();
-        $decade = $request->query('decade');
-        $actorsByDecade = [];
-        $title = "Actors from the $decade's";
-        //el campo de la base de datos es birthdate
-        foreach ($actors as $actor) {
-            $actorDecade = substr($actor['birthdate'], 0, 3) . "0";
-            if ($actorDecade == $decade)
-                $actorsByDecade[] = $actor;
-        }
+        $decade = (int)$request->query('decade');//Fuerzo a int, sin funciona pero da error al convertir en $actorsByDecade
+        $enddecade = $decade + 9; //Se le suma 9 para obtener el rango de la decada 
+        $title = "Actors from " . $decade . "'s";
+        //guardar los actores que sean de esa decada
+        $actorsByDecade = Actor::whereBetween('birthdate', ["$decade-01-01", "$enddecade-12-31"])->get();
+        // dd($actorsByDecade); //El array se pasa vacio
         return view('actors.list', ["actors" => $actorsByDecade, "title" => $title]);
     }
 
@@ -72,7 +61,7 @@ class ActorController extends Controller
             // $id = (int)$id;
             // dd($id);
             $actor = DB::table('actors')->where('id', $id)->first();
-            
+
             if (!$actor) {
                 return response()->json([
                     'error' => 'Actor not found'
