@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 use App\Models\Actor;
 
 class ActorController extends Controller
@@ -57,24 +57,12 @@ class ActorController extends Controller
      */
     public function destroyActor($id)
     {
-        try {
-            // $id = (int)$id;
-            // dd($id);
-            $actor = DB::table('actors')->where('id', $id)->first();
-
-            if (!$actor) {
-                return response()->json([
-                    'error' => 'Actor not found'
-                ], false);
-            }
-            DB::table('actors')->where('id', $id)->delete();
-            return response()->json([
-                'action' => 'delete'
-            ], true);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error deleting actor'
-            ], false);
+        $actor = Actor::find($id);
+        if ($actor) {
+            $actor->delete();
+            return response()->json(['message' => 'Actor deleted successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Actor not found'], 404);
         }
     }
     /**
