@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
-    use HasFactory;//para que la factory funcione
+    use HasFactory; //para que la factory funcione
     public function actors()
     {
-        return $this->belongsToMany(Actor::class, 'films_actors', 'film_id', 'actor_id');
+        return $this->belongsToMany(
+            Actor::class,
+            'films_actors',
+            'film_id',
+            'actor_id'
+        )->withTimestamps();
     }
 }

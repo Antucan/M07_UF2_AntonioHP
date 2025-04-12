@@ -17,7 +17,7 @@ class FilmActorSeeder extends Seeder
         $actors = Actor::all();
 
         foreach ($films as $film) {
-            $film->actors()->attach(
+            $film->actors()->syncWithoutDetaching(
                 $actors->random(rand(1, 5))->pluck('id')->toArray()
             );
         }
