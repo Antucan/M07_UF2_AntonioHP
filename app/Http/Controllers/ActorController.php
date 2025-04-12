@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-
 use App\Models\Actor;
-
+use Illuminate\Database\Eloquent\Collection;
 class ActorController extends Controller
 {
+    /**
+     * Read actors with films
+     */
+    public static function readActorsWithFilms(): Collection
+    {
+        $actors = Actor::with('films')->get();
+        return $actors;
+    }
+
     /**
      * Read actors from json and database
      */

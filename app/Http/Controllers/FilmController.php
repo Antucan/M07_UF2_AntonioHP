@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Queue\Failed\CountableFailedJobProvider;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Film;
+use Illuminate\Database\Eloquent\Collection;
 
 class FilmController extends Controller
 {
+    /**
+     * Read films with actors
+     */
+    public static function readFilmsWithActors(): Collection
+    {
+        $films = Film::with('actors')->get();
+        return $films;
+    }
+
     /**
      * Read films from storage
      */

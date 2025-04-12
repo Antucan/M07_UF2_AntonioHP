@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ActorController;
+use App\Http\Controllers\FilmController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::delete('Actors/{id}', [ActorController::class, "destroyActor"])->name('destroyActor');
 Route::get('index', [ActorController::class, "index"])->name('index');
+/**
+ * List films with actors. Url to be used should be api/films
+ */
+Route::get('films', [FilmController::class, "readFilmsWithActors"])->name('listFilms');
