@@ -25,3 +25,7 @@ Route::get('index', [ActorController::class, "index"])->name('index');
  * List films with actors. Url to be used should be api/films
  */
 Route::get('films', [FilmController::class, "readFilmsWithActors"])->name('listFilms');
+/**
+ * List actors with films. Url to be used should be api/actors
+ */
+Route::get('actors', [ActorController::class, "readActorsWithFilms"])->name('listActors');
